@@ -9,7 +9,7 @@ struct cluster {
 	int lineNumber;
 };
 
-std::string* clusters;
+std::vector<std::string> clusters;
 std::vector<cluster> clusterFind;
 
 int selected = 0;
@@ -20,7 +20,7 @@ int main()
 {
 
 Restart:
-
+	clusters.clear();
 	system("title Wot Blitz Cluster Selector");
 
 	std::cout << "Select region: EU, RU (0, 1): ";
@@ -36,11 +36,13 @@ Restart:
 
 	if (selectedRegion == 0)
 	{
-		clusters = new std::string[5]{ "login0.wotblitz.eu", "login1.wotblitz.eu", "login2.wotblitz.eu", "login3.wotblitz.eu", "login4.wotblitz.eu" };
+		std::cout << "Select cluster (0, 1, 2, 3, 4): ";
+		clusters = { "login0.wotblitz.eu", "login1.wotblitz.eu", "login2.wotblitz.eu", "login3.wotblitz.eu", "login4.wotblitz.eu" };
 	}
 	else if(selectedRegion == 1)
 	{
-		clusters = new std::string[5]{ "login0.tanksblitz.ru", "login1.tanksblitz.ru", "login2.tanksblitz.ru", "login3.tanksblitz.ru", "login4.tanksblitz.ru" };
+		std::cout << "Select cluster (0, 1, 2, 3, 4, 5): ";
+		clusters = { "login0.tanksblitz.ru", "login1.tanksblitz.ru", "login2.tanksblitz.ru", "login3.tanksblitz.ru", "login4.tanksblitz.ru", "login5.tanksblitz.ru"};
 	}
 	else
 	{
@@ -48,8 +50,6 @@ Restart:
 		Sleep(2000);
 		goto Restart;
 	}
-
-	std::cout << "Select cluster (0, 1, 2, 3, 4): ";
 
 	try {
 		std::cin >> selected;
@@ -61,7 +61,7 @@ Restart:
 		goto Restart;
 	}
 
-	if (selected < 0 || selected > 5)
+	if (0 > selected || selected > clusters.size() - 1)
 	{
 		std::cout << "Unknown cluster!" << std::endl;
 		Sleep(2000);
@@ -74,7 +74,7 @@ Restart:
 	}
 	catch (...)
 	{
-		std::cout << "Unknown choose!" << std::endl;
+		std::cout << "Unknown choose !" << std::endl;
 		Sleep(2000);
 		goto Restart;
 	}
@@ -109,7 +109,7 @@ Restart:
 
 	for (int i = 0; i < hosts.size(); i++)
 	{
-		for(int j = 0; j < 5; j++)
+		for(int j = 0; j < clusters.size(); j++)
 		{
 			if (hosts[i].find(clusters[j]) != std::string::npos)
 				clusterFind.push_back({  clusters[j], i });
@@ -143,7 +143,7 @@ Restart:
 	else 
 	{
 		
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < clusters.size(); i++)
 		{
 			if (selected == i)
 			{
